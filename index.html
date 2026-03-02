@@ -1,11 +1,306 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Galeria de Atividades Infantis</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            color: white;
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            position: relative;
+            padding-bottom: 15px;
+        }
+
+        h1::after {
+            content: "🎨";
+            font-size: 1.2em;
+            margin-left: 10px;
+        }
+
+        h1::before {
+            content: "🎮";
+            font-size: 1.2em;
+            margin-right: 10px;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 1.2em;
+            margin-bottom: 40px;
+            font-style: italic;
+        }
+
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 20px;
+            padding: 20px;
+        }
+
+        .gallery-item {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+            position: relative;
+            aspect-ratio: 1;
+            cursor: pointer;
+        }
+
+        .gallery-item:hover {
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            transition: all 0.3s ease;
+        }
+
+        .gallery-item:hover img {
+            transform: scale(1.1);
+        }
+
+        .gallery-item::after {
+            content: "Atividade " attr(data-index);
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent);
+            color: white;
+            padding: 15px 10px 10px;
+            font-size: 0.9em;
+            text-align: center;
+            transform: translateY(100%);
+            transition: transform 0.3s ease;
+        }
+
+        .gallery-item:hover::after {
+            transform: translateY(0);
+        }
+
+        .gallery-item::before {
+            content: "🖼️";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 3em;
+            opacity: 0.5;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 40px;
+            color: white;
+            font-size: 1.1em;
+        }
+
+        .footer p {
+            background: rgba(255, 255, 255, 0.2);
+            display: inline-block;
+            padding: 10px 30px;
+            border-radius: 50px;
+            backdrop-filter: blur(5px);
+        }
+
+        /* Cores diferentes para os placeholders */
+        .gallery-item:nth-child(5n+1)::before { content: "🎨"; }
+        .gallery-item:nth-child(5n+2)::before { content: "📚"; }
+        .gallery-item:nth-child(5n+3)::before { content: "🧩"; }
+        .gallery-item:nth-child(5n+4)::before { content: "🎭"; }
+        .gallery-item:nth-child(5n+5)::before { content: "🎵"; }
+
+        /* Estilo para o contador de espaços */
+        .stats {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 15px 25px;
+            border-radius: 50px;
+            margin-bottom: 30px;
+            color: white;
+        }
+
+        .stats span {
+            background: rgba(255, 255, 255, 0.3);
+            padding: 5px 15px;
+            border-radius: 25px;
+            font-weight: bold;
+        }
+
+        /* Responsividade */
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+            
+            h1 {
+                font-size: 2em;
+            }
+            
+            .gallery {
+                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+                gap: 15px;
+            }
+            
+            .stats {
+                flex-direction: column;
+                gap: 10px;
+                text-align: center;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .gallery {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            h1 {
+                font-size: 1.5em;
+            }
+        }
+
+        /* Animação de entrada */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .gallery-item {
+            animation: fadeIn 0.5s ease forwards;
+        }
+
+        /* Delay na animação para cada item */
+        .gallery-item:nth-child(1) { animation-delay: 0.1s; }
+        .gallery-item:nth-child(2) { animation-delay: 0.2s; }
+        .gallery-item:nth-child(3) { animation-delay: 0.3s; }
+        .gallery-item:nth-child(4) { animation-delay: 0.4s; }
+        .gallery-item:nth-child(5) { animation-delay: 0.5s; }
+        /* Adicione mais delays conforme necessário, mas como são 50, os primeiros terão delay */
+    </style>
 </head>
 <body>
-    Eu não sei o que estou fazendo!!
+    <div class="container">
+        <h1>Galeria de Atividades Infantis</h1>
+        <p class="subtitle">🌟 50 espaços incríveis para guardar suas atividades favoritas! 🌟</p>
+        
+        <div class="stats">
+            <span>🎯 Total de Espaços: 50</span>
+            <span>✨ Atividades disponíveis para adicionar</span>
+            <span>📝 Passe o mouse para ver o número</span>
+        </div>
+
+        <div class="gallery" id="gallery">
+            <!-- Gerando 50 espaços com JavaScript -->
+        </div>
+
+        <div class="footer">
+            <p>🎉 Clique nos espaços para adicionar suas atividades favoritas! 🎉</p>
+        </div>
+    </div>
+
+    <script>
+        // Função para gerar os 50 itens da galeria
+        function generateGallery() {
+            const gallery = document.getElementById('gallery');
+            const totalItems = 50;
+            
+            // Lista de imagens placeholder temáticas para atividades infantis
+            const placeholderImages = [
+                'https://images.unsplash.com/photo-1503454537195-1dcabb73ffb9?w=400', // criança desenhando
+                'https://images.unsplash.com/photo-1596464716127-f2a82984de30?w=400', // brincando com blocos
+                'https://images.unsplash.com/photo-1596464716147-9c5f5b6b3b3b?w=400', // lendo livro
+                'https://images.unsplash.com/photo-1596464716147-9c5f5b6b3b3c?w=400', // pintando
+                'https://images.unsplash.com/photo-1596464716147-9c5f5b6b3b3d?w=400', // brincando com massinha
+                'https://images.unsplash.com/photo-1596464716147-9c5f5b6b3b3e?w=400', // quebra-cabeça
+                'https://images.unsplash.com/photo-1596464716147-9c5f5b6b3b3f?w=400', // instrumentos musicais
+                'https://images.unsplash.com/photo-1596464716147-9c5f5b6b3b40?w=400', // teatro
+                'https://images.unsplash.com/photo-1596464716147-9c5f5b6b3b41?w=400', // dança
+                'https://images.unsplash.com/photo-1596464716147-9c5f5b6b3b42?w=400'  // atividades ao ar livre
+            ];
+
+            for (let i = 1; i <= totalItems; i++) {
+                const galleryItem = document.createElement('div');
+                galleryItem.className = 'gallery-item';
+                galleryItem.setAttribute('data-index', i);
+                
+                // Escolhe uma imagem placeholder baseada no índice
+                // Isso garante que teremos algumas imagens reais e algumas placeholders
+                if (i <= 10) {
+                    // Usa imagens reais para os primeiros 10 itens
+                    const img = document.createElement('img');
+                    img.src = placeholderImages[i - 1];
+                    img.alt = `Atividade Infantil ${i}`;
+                    img.loading = 'lazy'; // Carregamento lazy para melhor performance
+                    
+                    // Tratamento de erro para imagens que não carregarem
+                    img.onerror = function() {
+                        this.style.display = 'none';
+                        this.parentElement.style.background = 'linear-gradient(135deg, #f6d5f7 0%, #fbe9d2 100%)';
+                    };
+                    
+                    galleryItem.appendChild(img);
+                } else {
+                    // Para os demais, usa cores gradientes como placeholder
+                    const hue = (i * 137) % 360; // Gera cores diferentes baseadas no índice
+                    galleryItem.style.background = `linear-gradient(135deg, hsl(${hue}, 70%, 80%), hsl(${hue + 60}, 70%, 70%))`;
+                }
+                
+                // Adiciona evento de clique para mostrar que o espaço está pronto para receber uma atividade
+                galleryItem.addEventListener('click', function() {
+                    const index = this.getAttribute('data-index');
+                    alert(`🎯 Espaço ${index} está pronto para receber uma nova atividade infantil!\n\nCole o link da imagem no código HTML para adicionar.`);
+                });
+                
+                gallery.appendChild(galleryItem);
+            }
+        }
+
+        // Chama a função quando a página carregar
+        document.addEventListener('DOMContentLoaded', generateGallery);
+    </script>
 </body>
 </html>
